@@ -3,7 +3,7 @@ devtools::install_github("AlbertRapp/tidychatmodels")
 library(tidychatmodels)
 library(dplyr)
 
-# API Key Setup
+# Chat setup
 chat_ollama <- create_chat('ollama') 
 chat_ollama
 
