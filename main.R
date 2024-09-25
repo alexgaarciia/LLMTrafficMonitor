@@ -2,6 +2,7 @@
 devtools::install_github("AlbertRapp/tidychatmodels")
 library(tidychatmodels)
 library(dplyr)
+library(purrr)
 
 # Chat setup
 chat_ollama <- create_chat('ollama') 
@@ -36,4 +37,3 @@ rcode_chatbot_result %>%
   extract_chat(silent = TRUE) %>%
   pluck("message", 3) %>%
   cat()
-
