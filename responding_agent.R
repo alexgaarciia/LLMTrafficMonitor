@@ -1,5 +1,3 @@
-# responding_agent_v2.R
-
 library(plumber)
 library(tidychatmodels)
 
@@ -22,3 +20,6 @@ function(query="") {
   
   list(response = response$message[[3]])
 }
+
+# Run plumber API
+plumb(file='responding_agent.R')$run(port=3836)
