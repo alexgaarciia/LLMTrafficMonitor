@@ -21,5 +21,4 @@ function(query="") {
   list(response = response$message[[3]])
 }
 
-# Run plumber API
-#plumb(file='responding_agent.R')$run(port=3836)
+# Run plumber API: plumb(file='responding_agent.R')$run(port=3836)
