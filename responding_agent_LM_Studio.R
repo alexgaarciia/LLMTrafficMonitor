@@ -15,7 +15,7 @@ function(query = "") {
   
   # Prepare the request body as a JSON list
   body <- list(
-    model = "llama-2-13b-chat",
+    model = "lmstudio-community/gemma-2-9b-it-GGUF",
     messages = list(
       list(role = "system", content = "You are the responding agent. Answer the query."),
       list(role = "user", content = query)
@@ -45,4 +45,4 @@ function(query = "") {
 }
 
 # To run the API, save this script and run it as follows:
-# plumb("path_to_this_script.R")$run(port = 3836)
+# plumb(file='responding_agent_LM_Studio.R')$run(port=3836)
