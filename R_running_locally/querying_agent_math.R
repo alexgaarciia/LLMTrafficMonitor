@@ -6,7 +6,7 @@ library(httr)
 ################################################################################
 
 # Read the JSONL file line by line and extract the 'question' field
-file_path <- "data/test.jsonl"
+file_path <- "../data/test.jsonl"
 questions <- c()
 
 # Open the file and read each line
