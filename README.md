@@ -1,4 +1,4 @@
-# LLMTrafficMonitor (README under construction)
+# LLMTrafficMonitor 
 The main goal of this repository is to capture how much traffic do LLMs generate. 
 
 ## Useful Information
