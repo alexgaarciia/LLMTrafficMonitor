@@ -1,7 +1,9 @@
 import os
+from dotevn import load_dotenv
 from flask import Flask, request, jsonify
 from langchain_openai import OpenAI
 from langchain_mistralai.chat_models import ChatMistralAI
+from langchain_ollama.chat_models import ChatOllama
 
 
 ###################################################
@@ -11,35 +13,35 @@ from langchain_mistralai.chat_models import ChatMistralAI
 
 
 ###################################################
-# OpenAI
+# API Keys
 ###################################################
+# OpenAI
 os.environ["OPENAI_API_KEY"] = ("sk-proj-o3z4d7s6BldQlc-x3vsWXCweUY55di21eL1WXt-52J2F5YHctH2_AU0i4-T3BlbkFJV"
                                 "-j9rnTR4TD2giSrEolrkgCqdtUMqO8h2IsYtpGNzeKf3nJIGduBz2bBkA")
 os.environ["ORGANIZATION_ID"] = "org-b9e6eTH4lj1kn4VhwdRfE1Rx"
-# Configure API key and organization ID from environment variables
-# os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
-# os.environ["ORGANIZATION_ID"] = os.getenv("ORGANIZATION_ID")
 
-
-###################################################
-# MistralAI
-###################################################
+# Mistral
 os.environ["MISTRAL_API_KEY"] = "cgn4BLFLkeXPHAOfs16nhKDtgxUBDX7T"
+
+
+###################################################
+# Initialize the LLM with LangChain
+###################################################
+# Define the available models
+MODELS = {
+    "openai": OpenAI(temperature=0.9),
+    "mistral": ChatMistralAI(),
+    "local": OpenAI(base_url="http://localhost:3648/v1", api_key="lm-studio"),
+    "ollama": ChatOllama(model="llama3.3"),
+    "gemma": ChatOllama(model="gemma2")
+}
 
 
 ###################################################
 # Initialize Flask app
 ###################################################
 app = Flask(__name__)
-
-
-###################################################
-# Initialize the LLM with LangChain
-###################################################
-# llm = OpenAI(temperature=0.9)  # OpenAI
-# llm = ChatMistralAI()  # MistralAI
-llm = OpenAI(base_url="http://localhost:3648/v1", api_key="lm-studio")  # LM Studio (Local Model)
-
+DEFAULT_MODEL = "gemma"
 
 @app.route('/respond', methods=['GET'])
 def respond():
@@ -49,6 +51,9 @@ def respond():
     if not query:
         return jsonify({"error": "No query provided"}), 400
 
+    # Get the selected model
+    llm = MODELS.get(DEFAULT_MODEL)
+
     # Generate a response using the LLM
     try:
         response = llm.invoke(query)
@@ -56,12 +61,8 @@ def respond():
         return jsonify({"error": f"LLM invocation failed: {str(e)}"}), 500
 
     # Return the response
-    if isinstance(llm, OpenAI):
-        print("Response from OpenAI/Local LLM:", response)
-        return jsonify({"response": response})
-    else:
-        print(response.content)
-        return response.content
+    print(f"Response from {DEFAULT_MODEL} model:", response)
+    return jsonify({"response": response})
 
 
 if __name__ == '__main__':
