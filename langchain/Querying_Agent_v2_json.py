@@ -13,7 +13,7 @@ with open('../data/test.jsonl', 'r') as file:
 
 def querying_agent():
     counter = 1
-    for question in questions[1:5]:
+    for question in questions[1:2]:
         query = str(question)
         # Create the URL with the encoded query
         url = f"http://127.0.0.1:3836/respond?query={urllib.parse.quote(query)}"
