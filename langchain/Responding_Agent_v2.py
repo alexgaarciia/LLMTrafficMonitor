@@ -1,15 +1,8 @@
 import os
-from dotevn import load_dotenv
 from flask import Flask, request, jsonify
 from langchain_openai import OpenAI
 from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_ollama.chat_models import ChatOllama
-
-
-###################################################
-# Load environment variables
-###################################################
-# load_dotenv()
 
 
 ###################################################
@@ -31,9 +24,9 @@ os.environ["MISTRAL_API_KEY"] = "cgn4BLFLkeXPHAOfs16nhKDtgxUBDX7T"
 MODELS = {
     "openai": OpenAI(temperature=0.9),
     "mistral": ChatMistralAI(),
+    "gemma": ChatOllama(model="gemma2:27b"),
+    "phi": ChatOllama(model="phi3:14b"),
     "local": OpenAI(base_url="http://localhost:3648/v1", api_key="lm-studio"),
-    "ollama": ChatOllama(model="llama3.3"),
-    "gemma": ChatOllama(model="gemma2")
 }
 
 
@@ -41,7 +34,8 @@ MODELS = {
 # Initialize Flask app
 ###################################################
 app = Flask(__name__)
-DEFAULT_MODEL = "gemma"
+DEFAULT_MODEL = "phi"
+
 
 @app.route('/respond', methods=['GET'])
 def respond():
@@ -61,8 +55,8 @@ def respond():
         return jsonify({"error": f"LLM invocation failed: {str(e)}"}), 500
 
     # Return the response
-    print(f"Response from {DEFAULT_MODEL} model:", response)
-    return jsonify({"response": response})
+    print(f"Response from {DEFAULT_MODEL} model:", response.content)
+    return jsonify({"response": response.content})
 
 
 if __name__ == '__main__':
