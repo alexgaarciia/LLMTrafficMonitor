@@ -1,15 +1,21 @@
 import os
-from dotenv import load_dotenv
 from flask import Flask, request, jsonify
+from langchain_openai import OpenAI
+from langchain_mistralai.chat_models import ChatMistralAI
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from langchain_community.llms import HuggingFacePipeline
+from transformers import pipeline
 
+
+###################################################
 # Load environment variables
+###################################################
 # load_dotenv()
 
 
+###################################################
 # OpenAI
-# from langchain_community.llms import OpenAI
-from langchain_openai import OpenAI
-
+###################################################
 os.environ[
     "OPENAI_API_KEY"] = "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"
 os.environ["ORGANIZATION_ID"] = "org-b9e6eTH4lj1kn4VhwdRfE1Rx"
@@ -17,17 +23,44 @@ os.environ["ORGANIZATION_ID"] = "org-b9e6eTH4lj1kn4VhwdRfE1Rx"
 # os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 # os.environ["ORGANIZATION_ID"] = os.getenv("ORGANIZATION_ID")
 
-# Mistrail
-from langchain_mistralai.chat_models import ChatMistralAI
 
+###################################################
+# MistralAI
+###################################################
 os.environ["MISTRAL_API_KEY"] = "cgn4BLFLkeXPHAOfs16nhKDtgxUBDX7T"
 
+
+###################################################
+# Qwen (QwQ-32B-Preview)
+###################################################
+tokenizer_qwen = AutoTokenizer.from_pretrained("Qwen/QwQ-32B-Preview")
+model_qwen = AutoModelForCausalLM.from_pretrained("Qwen/QwQ-32B-Preview")
+pipe_qwen = pipeline("text-generation", model=model_qwen, tokenizer=tokenizer_qwen)
+qwen_llm = HuggingFacePipeline(pipeline=pipe_qwen)
+
+
+###################################################
+# Llama-3.3-70B
+###################################################
+tokenizer_llama = AutoTokenizer.from_pretrained("meta-llama/Llama-3.3-70B-Instruct")
+model_llama = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-3.3-70B-Instruct")
+pipe_llama = pipeline("text-generation", model=model_llama, tokenizer=tokenizer_llama)
+llama_llm = HuggingFacePipeline(pipeline=pipe_llama)
+
+
+###################################################
 # Initialize Flask app
+###################################################
 app = Flask(__name__)
 
+
+###################################################
 # Initialize the LLM with LangChain
-# llm = OpenAI(temperature=0.9) #OpenAI
-llm = ChatMistralAI()  # Mistrail
+###################################################
+# llm = OpenAI(temperature=0.9)  # OpenAI
+llm = ChatMistralAI()  # MistralAI
+# llm = qwen_llm  # Qwen
+# llm = llama_llm  # Llama 
 
 
 @app.route('/respond', methods=['GET'])
@@ -51,7 +84,7 @@ def respond():
     # print("2", jsonify({"response": response}))
     # return jsonify({"response": response})
 
-    # Mistrail
+    # MistralAI
     print("2", response.content)
     return response.content
 
