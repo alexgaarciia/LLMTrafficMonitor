@@ -18,3 +18,19 @@ The main goal of this repository is to capture how much traffic do LLMs generate
 
 ### Folder: data
 - test.jsonl: JSON file containing math questions (obtained from [OpenAI](https://github.com/openai/grade-school-math/tree/master)).
+
+
+## Contributing
+Contributions are welcome! If you have suggestions for improvements or new features, feel free to open an issue or submit a pull request.
+
+
+## License
+This project is licensed under the MIT License. See the [LICENSE]() file for more details.
+
+
+## References
+> **Introducing Large Language Models as the Next Challenging Internet Traffic Source**
+> 
+> Nataliia Koneva, Alejandro Leonardo García Navarro, Alfonso Sánchez-Macián, José Alberto Hernández, Moshe Zukerman, Óscar González de Dios
+> 
+> *URL:* [https://arxiv.org/abs/2504.10688](https://arxiv.org/abs/2504.10688)
