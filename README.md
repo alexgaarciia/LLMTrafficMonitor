@@ -3,23 +3,13 @@ The main goal of this repository is to measure how much Internet traffic is gene
 
 This repo includes code to estimate traffic per prompt for popular open-source LLMs in 2025. On average, each query-response exchange generates ~7.6 KB of data, comparable to email or web traffic. We argue AI could become the next major driver of Internet traffic.
 
-## Key folders and files in the repository
-### Folder: R_running_locally
-- responding_agent.R: Implements a responding agent, which processes incoming queries using an local LLM. The script defines a Plumber API endpoint to handle requests, respond to queries, and simulate conversational interactions.
-- querying_agent.R: Implements a querying agent that repeatedly prompts the user for a query (until 'Exit' is typed), sends it to a responding agent via an HTTP request, and displays the response.
-- querying_agent_math.R: Extracts a set of questions from a JSONL file, then sends these questions to the responding agent via HTTP requests. The querying agent processes the responses for each question and prints the results. 
-
-### Folder: langchain
-- Responding_Agent_v2.py: Implements a Flask-based server that handles queries and generates responses using LangChain models.
-- Querying_Agent_v2_json.py: Sends queries to a LangChain model, processes responses, and measures request and response sizes.
-- langchain_demo.ipynb: Jupter notebook used to test out the LangChain library.
-
-### Folder: packet_capture
-- scapy_packet_capture_demo.ipynb: Jupyter notebook that captures packets based on a target IP and port, then prints details about the source and destination IPs, ports, and packet size.
-- packet_capture_v2.py: Python script that captures network packets based on a target IP and port, then prints details about the packets.
-
-### Folder: data
-- test.jsonl: JSON file containing math questions (obtained from [OpenAI](https://github.com/openai/grade-school-math/tree/master)).
+## Key folders in the repository
+| Folder | Description |
+|--------|-------------|
+| `R_running_locally/` | R scripts for local LLM traffic testing. Includes a Plumber-based responding agent that connects to LM Studio, and two querying agents: one for interactive input and another that automates queries from a JSONL file. |
+| `Querying_Responding_Agents/` | Pythobn scripts for simulating traffic between querying agents and LLM-based responders. Querying agents read test data (e.g. math questions), send HTTP requests, and log traffic size. Responding agents run lightweight HTTP servers (e.g. Flask apps) that interface with specific LLMs like Claude, OpenAI, Mistral, DeepSeek, and others. |
+| `packet_capture/` | Jupyter notebook for analyzing network packet sizes during LLM interactions, as well as providing traffic statistics (e.g., average request/response sizes) based on IP and port filters. |
+| `data/` | Dataset used for testing, which is a JSON file containing math questions (obtained from [OpenAI](https://github.com/openai/grade-school-math/tree/master)). |
 
 ## Contributing
 Contributions are welcome! If you have suggestions for improvements or new features, feel free to open an issue or submit a pull request.
